@@ -21,5 +21,9 @@ fia - handles I/O and exit call. Format: fia <imm>  if <imm> = 0 it reads input 
 NOTICE:
 There is no stack_pointer. It only goes off when pushed/popped.
 
-TO RUN:
+TO RUN FACTORIAL FUNCTION:
+Execute main.rs in src/interpreter/main.rs and input a number n and it will output n! Wouldn't advise to try for n > 8
+There is no input validation so please dont abuse it.
+
+TO RUN YOUR OWN CODE:
 Write your code in a file (preferably extension .f1l). Go into main.rs and change variable file_name to the file name :skull: and execute main.rs

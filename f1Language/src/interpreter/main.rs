@@ -5,10 +5,11 @@ fn main() {
     let file_name = "file.f1l";
     let mut input_file = File::open(file_name).expect("Couldn't find file!");
     let mut all_lines: String = String::new();
-    let mut drivers: [i32; 4] = [0, 0, 0, 0]; // index_0 should be return aka $v0
-                                              // index_1 should be argument aka $a0
-                                              // index_2 should be argument 2 aka $a1
-                                              // index_3 should be temporary $t0
+    let mut drivers: [i32; 4] = [0, 0, 0, 0]; // registers [0] is used for I/O the rest is free for whatever
+                                                //altough its funny if [0] is return value since its alonso and he returns
+                                                // [1] is args because its verstappen and he sent it
+                                                // [2] same as above but for ricciardo
+                                                // [3] is temporary since its mazepin
     let mut stack: Vec<i32> = vec![];
     input_file
         .read_to_string(&mut all_lines)
