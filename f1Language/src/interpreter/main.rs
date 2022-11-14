@@ -1,15 +1,17 @@
+use core::time;
 use std::fs::File;
 use std::io::*;
+use std::thread::sleep;
 
 fn main() {
     let file_name = "file.f1l";
     let mut input_file = File::open(file_name).expect("Couldn't find file!");
     let mut all_lines: String = String::new();
     let mut drivers: [i32; 4] = [0, 0, 0, 0]; // registers [0] is used for I/O the rest is free for whatever
-                                                //altough its funny if [0] is return value since its alonso and he returns
-                                                // [1] is args because its verstappen and he sent it
-                                                // [2] same as above but for ricciardo
-                                                // [3] is temporary since its mazepin
+                                              //altough its funny if [0] is return value since its alonso and he returns
+                                              // [1] is args because its verstappen and he sent it
+                                              // [2] same as above but for ricciardo
+                                              // [3] is temporary since its mazepin
     let mut stack: Vec<i32> = vec![];
     input_file
         .read_to_string(&mut all_lines)
@@ -40,7 +42,7 @@ fn main() {
         }
 
         if length == 1 {
-                panic!("Error at line {}: {}. \nWay to few tokens!", i, lines[i]);
+            panic!("Error at line {}: {}. \nWay to few tokens!", i, lines[i]);
         }
         let match_index = {
             if length == 2 {
@@ -124,7 +126,18 @@ fn main() {
                         i, lines[i]
                     );
                 }
-                i = ((i as isize) + imm - 1) as usize; // - 1 since we are adding 1 at the end.
+                if (i as isize) + imm < 0 {
+                    println!("WARNING: AT LINE {}: {}. \nJUMP COMMAND GOES TO NEGATIVE LINE. PROBABLY NOT SUPPOSED TO. ADJUSTING TO 0.\nNotice program will sleep for 2 seconds.", i, lines[i]);
+                    sleep(time::Duration::from_secs(2));
+                    i = 0; // because were adding 1 at the end // dont underflow , well more like cause an exception.
+                    continue;
+                } else {
+                    if (i as isize) + imm > lines.len() as isize {
+                        println!("WARNING: AT LINE {}: {}. \nJUMP COMMAND GOES TO LINE AFTER EOF. PROBABLY NOT SUPPOSED TO. PROGRAM WILL EXIT.", i, lines[i]);
+                    }
+                    i = ((i as isize) + imm) as usize;
+                    continue;
+                }
             }
 
             "quali_mode" => {
@@ -145,24 +158,25 @@ fn main() {
                     .expect("Error at line {i}: {lines[i]}.\nStack is empty.");
             }
 
-            "fia" => { //handles I/O and exit call
+            "fia" => {
+                //handles I/O and exit call
                 if length != 2 {
                     panic!("Wrong format for tokens at line {}: {}.\nfia should format:\nfia <imm>\n <imm> = 0 reads input, <imm> = 1 outputs alonso, <imm> = -1 exits. ", i, lines[i]);
                 }
 
-                let imm = words[1].parse::<isize>().expect("Error at line {i}: {lines[i]}.\nIt's not an immidiate.");
-                
+                let imm = words[1]
+                    .parse::<isize>()
+                    .expect("Error at line {i}: {lines[i]}.\nIt's not an immidiate.");
+
                 if imm == 0 {
                     drivers[0] = get_input();
-                }
-                else if imm == 1 {
+                } else if imm == 1 {
                     println!("Output: {}", drivers[0]);
-                }
-                else if imm == -1 {
+                } else if imm == -1 {
                     i = usize::MAX;
                     continue;
                 }
-            },
+            }
             _ => panic!("Error at line {}: {}.\n Unknown token", i, lines[i]),
         }
         i = i + 1;
@@ -189,6 +203,11 @@ fn get_driver(driver: &str, line_index: usize) -> usize {
 fn get_input() -> i32 {
     let input = stdin();
     let mut line_input = String::new();
-    input.read_line(&mut line_input).expect("Couldn't read any input");
-    line_input.trim().parse::<i32>().expect("Input was not a number")
+    input
+        .read_line(&mut line_input)
+        .expect("Couldn't read any input");
+    line_input
+        .trim()
+        .parse::<i32>()
+        .expect("Input was not a number")
 }
