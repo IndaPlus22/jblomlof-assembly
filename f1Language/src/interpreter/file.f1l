@@ -1,0 +1,30 @@
+fia 0 #getting input going into alonso
+verstappen plan alonso #input as loop_end
+verstappen target_plus 1 ## increment by 1 to include n.
+mazepin target_lap 1 # loop counter and what we multiply by.
+alonso target_lap 1 # return value and what we store the fac in
+quali_mode verstappen #fac loop starts here
+quali_mode mazepin
+verstappen target_lap 0
+verstappen plan alonso
+ricciardo target_lap 0
+ricciardo plan mazepin
+box_box 7 #calling multiply func
+cooldown_lap mazepin
+cooldown_lap verstappen
+mazepin target_plus 1
+mazepin box_opposite verstappen
+box_box 10 # or more maybe i dont know #to end call
+box_box -12 #box to loop agian
+mazepin target_lap 0 # loop counter  multiply func starts here, works out verstappen * ricciardo but uses both mazepin and alonso also.
+alonso target_lap 0 # return value
+#for loop
+alonso plan ricciardo
+mazepin target_plus 1
+mazepin box_opposite verstappen
+box_box -12
+box_box -4
+fia 1 # print
+fia -1 #exit 
+
+

@@ -1,0 +1,25 @@
+
+
+
+
+
+
+REGISTERS: all regs are driver names. :) in following order alonso verstappen ricciardo mazepin
+
+OPS: 
+target_lap - sets a register to a 3 bit imm -4 <-> 3. Format: <driver> target_lap <imm> (8 bit)
+target_plus - adds or subs an imm to the driver -4 <-> 3. Format: <driver> target_plus <imm> (8 bit)
+plan - adds or subs driver2 to driver. Format: <driver1> plan <driver2> (7 bits last bit doesnt count)
+box_opposite - if the drivers are not equal skip next line. Format: <driver1> box_opposite <driver2> (7 bit last bid useless)
+box_box_ - go to relative position line. Format: box_box <imm> -16 <-> 15.
+quali_mode - push driver to stack. Format: quali_mode <driver>
+cooldown_lap - pop driver from stack. Format: cooldown_lap <driver>. Makes driver = top_of_stack
+fia - handles I/O and exit call. Format: fia <imm>  if <imm> = 0 it reads input to alonso
+                                                    if <imm> > 0 it prints alonso
+                                                    if <imm> < 0 it exits.
+
+NOTICE:
+There is no stack_pointer. It only goes off when pushed/popped.
+
+TO RUN:
+Write your code in a file (preferably extension .f1l). Go into main.rs and change variable file_name to the file name :skull: and execute main.rs
